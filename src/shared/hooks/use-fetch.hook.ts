@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Options = {
   endpoint: string;
@@ -10,36 +10,54 @@ export const useFetch = <T>(options: Options) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(options.endpoint, {
-          signal: controller.signal,
-        });
+  const { endpoint } = options;
 
-        if (!response.ok) {
-          setIsError(true);
-          throw new Error("Something went wrong!");
-        }
-        const data: T = await response.json();
+  const fetchData = useCallback(async () => {
+    // This is to cancel previous fetch requests, if any.
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
 
-        setData(data);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") {
-          setIsError(true);
-        }
-      } finally {
-        setIsLoading(false);
+    abortControllerRef.current = new AbortController();
+
+    try {
+      setIsLoading(true);
+      setIsError(false);
+
+      const response = await fetch(endpoint, {
+        signal: abortControllerRef.current.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error("Http error! status: " + response.status);
       }
-    };
 
+      const data: T = await response.json();
+      setData(data);
+      setIsLoading(false);
+      setIsError(false);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
+      setIsError(true);
+      setIsLoading(false);
+      setData(undefined);
+    }
+  }, [endpoint]);
+
+  useEffect(() => {
     fetchData();
 
-    return () => controller.abort();
-  }, [options.endpoint]);
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [fetchData]);
 
   return { data, isLoading, isError };
 };
