@@ -9,8 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as FormsRouteImport } from './routes/forms'
+import { Route as DataFetchingRouteImport } from './routes/data-fetching'
 import { Route as IndexRouteImport } from './routes/index'
 
+const FormsRoute = FormsRouteImport.update({
+  id: '/forms',
+  path: '/forms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataFetchingRoute = DataFetchingRouteImport.update({
+  id: '/data-fetching',
+  path: '/data-fetching',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +31,50 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/data-fetching': typeof DataFetchingRoute
+  '/forms': typeof FormsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/data-fetching': typeof DataFetchingRoute
+  '/forms': typeof FormsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/data-fetching': typeof DataFetchingRoute
+  '/forms': typeof FormsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/data-fetching' | '/forms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/data-fetching' | '/forms'
+  id: '__root__' | '/' | '/data-fetching' | '/forms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DataFetchingRoute: typeof DataFetchingRoute
+  FormsRoute: typeof FormsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/forms': {
+      id: '/forms'
+      path: '/forms'
+      fullPath: '/forms'
+      preLoaderRoute: typeof FormsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data-fetching': {
+      id: '/data-fetching'
+      path: '/data-fetching'
+      fullPath: '/data-fetching'
+      preLoaderRoute: typeof DataFetchingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +87,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DataFetchingRoute: DataFetchingRoute,
+  FormsRoute: FormsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

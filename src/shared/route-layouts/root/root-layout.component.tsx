@@ -1,10 +1,15 @@
 import { Outlet } from "@tanstack/react-router";
+import { Header } from "@/shared/components/header/header.component";
+import { Footer } from "@/shared/components/footer/footer.component";
 
 export const RootLayout = () => {
   return (
-    <div className="p-4 flex flex-col gap-4">
-      <h1 className="text-3xl font-bold text-center">Root Layout</h1>
-      <Outlet />
+    <div className="flex flex-col min-h-dvh">
+      <Header />
+      <main className="grow">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   );
 };
