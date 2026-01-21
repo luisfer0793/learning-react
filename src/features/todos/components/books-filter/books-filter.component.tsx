@@ -8,7 +8,7 @@ type Props = {
   handler: Handler;
 };
 
-export const TodoFilter = ({ handler }: Props) => {
+export const BooksFilter = ({ handler }: Props) => {
   const [category, setCategory] = useState<Category>("title");
   const [search, setSearch] = useState("");
 
@@ -33,11 +33,9 @@ export const TodoFilter = ({ handler }: Props) => {
   };
 
   return (
-    <form
-      onSubmit={onSubmitHandler}
-      className="flex items-center justify-between gap-2"
-    >
+    <form onSubmit={onSubmitHandler} className="flex items-center gap-2">
       <select
+        name="category"
         value={category}
         onChange={onCategoryChangeHandler}
         className="border border-gray-200 py-2 px-4 rounded-sm"
@@ -46,6 +44,7 @@ export const TodoFilter = ({ handler }: Props) => {
         <option value="userId">User ID</option>
       </select>
       <input
+        name="search"
         type="text"
         placeholder="Search..."
         value={search}

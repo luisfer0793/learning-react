@@ -9,18 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as FormsRouteImport } from './routes/forms'
-import { Route as DataFetchingRouteImport } from './routes/data-fetching'
+import { Route as BooksRouteImport } from './routes/books'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FormsRoute = FormsRouteImport.update({
   id: '/forms',
   path: '/forms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DataFetchingRoute = DataFetchingRouteImport.update({
-  id: '/data-fetching',
-  path: '/data-fetching',
+const BooksRoute = BooksRouteImport.update({
+  id: '/books',
+  path: '/books',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,36 +43,58 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/data-fetching': typeof DataFetchingRoute
+  '/books': typeof BooksRoute
   '/forms': typeof FormsRoute
+  '/login': typeof LoginRoute
+  '/sign-up': typeof SignUpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/data-fetching': typeof DataFetchingRoute
+  '/books': typeof BooksRoute
   '/forms': typeof FormsRoute
+  '/login': typeof LoginRoute
+  '/sign-up': typeof SignUpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/data-fetching': typeof DataFetchingRoute
+  '/books': typeof BooksRoute
   '/forms': typeof FormsRoute
+  '/login': typeof LoginRoute
+  '/sign-up': typeof SignUpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/data-fetching' | '/forms'
+  fullPaths: '/' | '/books' | '/forms' | '/login' | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/data-fetching' | '/forms'
-  id: '__root__' | '/' | '/data-fetching' | '/forms'
+  to: '/' | '/books' | '/forms' | '/login' | '/sign-up'
+  id: '__root__' | '/' | '/books' | '/forms' | '/login' | '/sign-up'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DataFetchingRoute: typeof DataFetchingRoute
+  BooksRoute: typeof BooksRoute
   FormsRoute: typeof FormsRoute
+  LoginRoute: typeof LoginRoute
+  SignUpRoute: typeof SignUpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forms': {
       id: '/forms'
       path: '/forms'
@@ -68,11 +102,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/data-fetching': {
-      id: '/data-fetching'
-      path: '/data-fetching'
-      fullPath: '/data-fetching'
-      preLoaderRoute: typeof DataFetchingRouteImport
+    '/books': {
+      id: '/books'
+      path: '/books'
+      fullPath: '/books'
+      preLoaderRoute: typeof BooksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -87,8 +121,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DataFetchingRoute: DataFetchingRoute,
+  BooksRoute: BooksRoute,
   FormsRoute: FormsRoute,
+  LoginRoute: LoginRoute,
+  SignUpRoute: SignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
