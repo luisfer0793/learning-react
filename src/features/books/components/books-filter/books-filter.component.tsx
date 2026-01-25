@@ -1,20 +1,21 @@
 import { type ChangeEvent, type FormEvent, useState } from "react";
+import { BookCategory } from "@/features/books/types/book-categories.type";
 
-export type Category = "title" | "userId";
-
-type Handler = (options: { category: Category; search: string } | null) => void;
+type Handler = (
+  options: { category: BookCategory; search: string } | null,
+) => void;
 
 type Props = {
   handler: Handler;
 };
 
 export const BooksFilter = ({ handler }: Props) => {
-  const [category, setCategory] = useState<Category>("title");
+  const [category, setCategory] = useState<BookCategory>(BookCategory.Title);
   const [search, setSearch] = useState("");
 
   const onCategoryChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
-    setCategory(value as Category);
+    setCategory(value as BookCategory);
   };
 
   const onSearchChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -40,8 +41,8 @@ export const BooksFilter = ({ handler }: Props) => {
         onChange={onCategoryChangeHandler}
         className="border border-gray-200 py-2 px-4 rounded-sm"
       >
-        <option value="title">Title</option>
-        <option value="userId">User ID</option>
+        <option value={BookCategory.Title}>Title</option>
+        <option value={BookCategory.Author}>Autor</option>
       </select>
       <input
         name="search"

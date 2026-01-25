@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import type { Book } from "@/features/todos/types/book.type";
+import type { Book } from "@/features/books/types/book.type";
 
 export const createGetBooksQueryOptions = () => {
   return queryOptions({

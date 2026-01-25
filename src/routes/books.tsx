@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createGetBooksQueryOptions } from "@/features/todos/services/get-books.service";
-import { BooksPage } from "@/features/todos/pages/books/books-page.component";
+import { createGetBooksQueryOptions } from "@/features/books/services/get-books.service";
+import { BooksPage } from "@/features/books/pages/books/books-page.component";
 
 export const Route = createFileRoute("/books")({
   component: BooksPage,
